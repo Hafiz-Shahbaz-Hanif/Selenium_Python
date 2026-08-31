@@ -1,0 +1,56 @@
+"""Behave lifecycle hooks: WebDriver setup/teardown, failure screenshots and
+Allure attachments.
+
+A fresh browser session is created per scenario for isolation. On failure the
+page screenshot, current URL and page source are attached to the Allure report.
+"""
+from __future__ import annotations
+
+import os
+
+import allure
+
+from config.config import CONFIG  # noqa: F401 - re-exported default config
+from utils.driver_factory import create_driver
+
+
+def before_all(context) -> None:
+    context.config.setup_logging()
+    context.app_config = CONFIG.with_userdata(context.config.userdata)
+    os.makedirs(context.app_config.artifacts_dir, exist_ok=True)
+
+
+def before_scenario(context, scenario) -> None:
+    context.driver = create_driver(context.app_config)
+
+
+def after_step(context, step) -> None:
+    if step.status == "failed" and getattr(context, "driver", None):
+        _attach_failure_artifacts(context, step.name)
+
+
+def after_scenario(context, scenario) -> None:
+    driver = getattr(context, "driver", None)
+    if driver is not None:
+        try:
+            driver.quit()
+        finally:
+            context.driver = None
+
+
+def _attach_failure_artifacts(context, label: str) -> None:
+    driver = context.driver
+    try:
+        allure.attach(
+            driver.get_screenshot_as_png(),
+            name=f"screenshot - {label}",
+            attachment_type=allure.attachment_type.PNG,
+        )
+        allure.attach(driver.current_url, name="url", attachment_type=allure.attachment_type.TEXT)
+        allure.attach(
+            driver.page_source,
+            name="page source",
+            attachment_type=allure.attachment_type.HTML,
+        )
+    except Exception:  # noqa: BLE001 - never mask the real failure
+        pass
