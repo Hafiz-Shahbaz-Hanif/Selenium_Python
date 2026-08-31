@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.env
+reports/
+allure-results/
+allure-report/
+.pytest_cache/
+.behave_history
+*.log
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,7 @@
+selenium==4.35.0
+behave==1.2.6
+behavex==4.6.5
+allure-behave==2.15.0
+python-dotenv==1.0.1
+PyHamcrest==2.1.0
+flake8==7.1.1
