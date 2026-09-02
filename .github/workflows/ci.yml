@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  behave:
+  saucedemo:
+    name: SauceDemo suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,23 +27,50 @@ jobs:
       - name: Install Google Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Run BDD suite (headless)
-        run: behave -D headless=true -f allure_behave.formatter:AllureFormatter -o reports/allure-results -f pretty
+      - name: Run the SauceDemo BDD suite (headless)
+        run: >
+          behave --tags=@saucedemo -D headless=true
+          -f allure_behave.formatter:AllureFormatter -o reports/allure-results -f pretty
 
       - name: Publish Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-saucedemo
           path: reports/allure-results
           retention-days: 7
 
-      - name: Publish JUnit + screenshots
+  orangehrm:
+    name: OrangeHRM suite (non-blocking)
+    runs-on: ubuntu-latest
+    # The OrangeHRM public demo is periodically reset and can be slow/unavailable,
+    # so this job informs but does not gate the build.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run the OrangeHRM BDD suite (headless)
+        run: >
+          behave --tags=@orangehrm -D headless=true
+          -f allure_behave.formatter:AllureFormatter -o reports/allure-results -f pretty
+
+      - name: Publish Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: behave-artifacts
-          path: |
-            reports/junit
-            reports/behave.log
+          name: allure-results-orangehrm
+          path: reports/allure-results
           retention-days: 7
