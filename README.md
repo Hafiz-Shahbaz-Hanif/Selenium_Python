@@ -38,21 +38,42 @@ and parallel execution.
   source are attached to the Allure report (`features/environment.py`).
 - **Config as code** — `config/config.py` is a typed, frozen dataclass driven by
   environment variables and Behave `-D` userdata, with working defaults.
+- **Data-driven at scale** — ~110 scenarios, most as `Scenario Outline` tables
+  (all 6 products × add / remove / detail / buy; every main OrangeHRM module).
+- **Developed with an agentic-AI workflow** — `CLAUDE.md` plus `.claude/` subagents
+  (`failure-triager`, `page-object-author`) and skills (`new-bdd-scenario`,
+  `allure-triage`).
+
+## Coverage
+
+| Feature | Scenarios | Notes |
+|---|---|---|
+| `login` | 12 | 5 user types reach the catalogue, bad-input outline, sign-out |
+| `inventory` | 25 | sort (4), add / add-remove / shelf-price per product (6 each) |
+| `product` | 14 | detail name/price/description and add-to-cart per product |
+| `cart` | 16 | listed / removed per product, prices match catalogue |
+| `checkout` | 14 | buy each product with 8% tax + total maths, field validation, cancels |
+| `orangehrm_login` | 2 | valid / invalid |
+| `orangehrm_navigation` | 25 | open + presence for all 12 main-menu modules, logout |
 
 ## Project structure
 
 ```
 .
+├── CLAUDE.md                  # conventions for AI agents working in this repo
+├── .claude/
+│   ├── agents/                # failure-triager, page-object-author
+│   └── skills/                # new-bdd-scenario, allure-triage
 ├── features/
 │   ├── environment.py        # Behave hooks: driver lifecycle, failure artifacts
 │   ├── *.feature             # Gherkin specs
 │   └── steps/                # step definitions (one module per area)
 ├── pages/                    # Page Object Model (BasePage + one class per screen)
-├── utils/driver_factory.py   # Chrome/Firefox/Remote WebDriver creation
+├── utils/                     # driver_factory, products catalogue data
 ├── config/config.py          # typed configuration
 ├── behave.ini                # Behave + userdata defaults
 ├── Makefile                  # install / test / smoke / parallel / allure
-└── .github/workflows/ci.yml
+└── .github/workflows/ci.yml  # SauceDemo (gating) + OrangeHRM (non-blocking) jobs
 ```
 
 ## Getting started
