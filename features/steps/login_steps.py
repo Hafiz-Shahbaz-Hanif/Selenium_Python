@@ -1,18 +1,9 @@
-import parse
-from behave import given, register_type, then, when
+from behave import given, then, when
 from hamcrest import assert_that, contains_string, equal_to
 
+from config.config import CONFIG
 from pages.inventory_page import InventoryPage
 from pages.login_page import LoginPage
-
-
-@parse.with_pattern(r'[^"]*')
-def parse_optional(text: str) -> str:
-    """A quoted value that is allowed to be empty (``""``)."""
-    return text
-
-
-register_type(Optional=parse_optional)
 
 
 @given("the SauceDemo login page is open")
@@ -24,6 +15,11 @@ def open_login(context):
 @when("I sign in as the standard user")
 def sign_in_standard(context):
     context.login_page.login_as_standard_user()
+
+
+@when('I sign in as "{username}"')
+def sign_in_as_user(context, username):
+    context.login_page.login_expecting_inventory(username, CONFIG.saucedemo_password)
 
 
 @when('I sign in with username "{username:Optional}" and password "{password:Optional}"')
@@ -41,3 +37,13 @@ def inventory_displayed(context):
 @then('I see the login error "{message}"')
 def login_error(context, message):
     assert_that(context.login_page.error_message(), contains_string(message))
+
+
+@when("I log out")
+def log_out(context):
+    InventoryPage(context.driver).logout()
+
+
+@then("the login page is shown")
+def login_page_shown(context):
+    assert_that(LoginPage(context.driver).is_login_form_visible(), equal_to(True))
