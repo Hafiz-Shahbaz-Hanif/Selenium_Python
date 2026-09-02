@@ -31,11 +31,40 @@ def after_step(context, step) -> None:
 
 def after_scenario(context, scenario) -> None:
     driver = getattr(context, "driver", None)
-    if driver is not None:
-        try:
-            driver.quit()
-        finally:
-            context.driver = None
+    if driver is None:
+        return
+    service_pid = _service_pid(driver)
+    try:
+        driver.quit()
+    except Exception:  # noqa: BLE001 - teardown must not fail the run
+        pass
+    finally:
+        context.driver = None
+        # Headless Chrome on Windows occasionally survives driver.quit(); across a
+        # 100+ scenario run those orphans exhaust the machine. Reap the tree.
+        _reap(service_pid)
+
+
+def _service_pid(driver):
+    try:
+        return driver.service.process.pid
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _reap(pid) -> None:
+    if not pid:
+        return
+    try:
+        import psutil  # optional; present via selenium's deps on most setups
+
+        proc = psutil.Process(pid)
+        for child in proc.children(recursive=True):
+            child.kill()
+        proc.kill()
+    except Exception:  # noqa: BLE001
+        if os.name == "nt":
+            os.system(f"taskkill /F /T /PID {pid} >NUL 2>&1")
 
 
 def _attach_failure_artifacts(context, label: str) -> None:
