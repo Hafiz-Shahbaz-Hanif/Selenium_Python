@@ -61,18 +61,37 @@ class BasePage:
             # A sticky footer/overlay is in the way - fall back to a JS click.
             self.driver.execute_script("arguments[0].click();", element)
 
+    def js_click(self, locator: Locator) -> None:
+        """Synthetic in-page click. Needed for React routing/submit buttons that
+        recent headless Chrome does not activate with a native WebDriver click."""
+        element = self.wait.until(EC.element_to_be_clickable(locator))
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", element)
+        self.driver.execute_script("arguments[0].click();", element)
+
     def click_and_wait_for_url(
         self, locator: Locator, url_fragment: str, attempts: int = 4
     ) -> None:
         """Click, then confirm navigation happened.
 
-        SauceDemo is a React app - a click that lands before the page has
-        hydrated is silently dropped. Retry a few times before failing.
+        SauceDemo is a React app and, on recent headless Chrome, the native
+        WebDriver click on some routing buttons does not fire the React handler.
+        The first attempt uses a native click; retries fall back to a synthetic
+        ``element.click()`` in the page, which does trigger the handler.
         """
         for attempt in range(attempts):
-            self.click(locator)
+            element = self.wait.until(EC.element_to_be_clickable(locator))
+            self.driver.execute_script(
+                "arguments[0].scrollIntoView({block: 'center'});", element
+            )
+            if attempt == 0:
+                try:
+                    element.click()
+                except ElementClickInterceptedException:
+                    self.driver.execute_script("arguments[0].click();", element)
+            else:
+                self.driver.execute_script("arguments[0].click();", element)
             try:
-                WebDriverWait(self.driver, 5).until(EC.url_contains(url_fragment))
+                WebDriverWait(self.driver, 8).until(EC.url_contains(url_fragment))
                 return
             except TimeoutException:
                 if attempt == attempts - 1:
