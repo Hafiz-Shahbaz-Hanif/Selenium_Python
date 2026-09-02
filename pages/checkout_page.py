@@ -16,10 +16,13 @@ class CheckoutPage(BasePage):
     POSTAL_CODE = (By.CSS_SELECTOR, '[data-test="postalCode"]')
     CONTINUE = (By.CSS_SELECTOR, '[data-test="continue"]')
     FINISH = (By.CSS_SELECTOR, '[data-test="finish"]')
+    CANCEL = (By.CSS_SELECTOR, '[data-test="cancel"]')
     ERROR = (By.CSS_SELECTOR, '[data-test="error"]')
 
+    SUBTOTAL = (By.CSS_SELECTOR, '[data-test="subtotal-label"]')
+    TAX = (By.CSS_SELECTOR, '[data-test="tax-label"]')
     SUMMARY_TOTAL = (By.CSS_SELECTOR, '[data-test="total-label"]')
-    ITEM_TOTAL = (By.CSS_SELECTOR, '[data-test="subtotal-label"]')
+    ITEM_NAME = (By.CSS_SELECTOR, '[data-test="inventory-item-name"]')
     COMPLETE_HEADER = (By.CSS_SELECTOR, '[data-test="complete-header"]')
 
     def wait_until_information_step(self) -> "CheckoutPage":
@@ -37,14 +40,32 @@ class CheckoutPage(BasePage):
         self.find(self.FINISH)
 
     def continue_without_details(self) -> None:
-        self.click(self.CONTINUE)
+        self.js_click(self.CONTINUE)
 
     def error_message(self) -> str:
         return self.text_of(self.ERROR)
 
+    @staticmethod
+    def _money(text: str) -> float:
+        return float(text.split("$")[1])
+
+    def subtotal(self) -> float:
+        return self._money(self.text_of(self.SUBTOTAL))  # "Item total: $58.29"
+
+    def tax(self) -> float:
+        return self._money(self.text_of(self.TAX))  # "Tax: $4.66"
+
     def displayed_total(self) -> float:
-        raw = self.text_of(self.SUMMARY_TOTAL)  # "Total: $58.29"
-        return float(raw.split("$")[1])
+        return self._money(self.text_of(self.SUMMARY_TOTAL))  # "Total: $62.95"
+
+    def overview_item_names(self) -> list[str]:
+        return [e.text.strip() for e in self.find_all(self.ITEM_NAME)]
+
+    def cancel_information_step(self) -> None:
+        self.click_and_wait_for_url(self.CANCEL, "cart.html")
+
+    def cancel_overview_step(self) -> None:
+        self.click_and_wait_for_url(self.CANCEL, "inventory.html")
 
     def finish(self) -> None:
         self.click_and_wait_for_url(self.FINISH, "checkout-complete")

@@ -19,15 +19,24 @@ class LoginPage(BasePage):
     def wait_until_loaded(self) -> None:
         self.find(self.LOGIN_BUTTON)
 
-    def login(self, username: str, password: str) -> None:
+    def _fill_credentials(self, username: str, password: str) -> None:
         self.type(self.USERNAME, username)
         self.type(self.PASSWORD, password)
+
+    def login(self, username: str, password: str) -> None:
+        """Submit the form without asserting the outcome (for negative cases)."""
+        self._fill_credentials(username, password)
         self.click(self.LOGIN_BUTTON)
 
-    def login_as_standard_user(self) -> None:
-        self.type(self.USERNAME, CONFIG.saucedemo_user)
-        self.type(self.PASSWORD, CONFIG.saucedemo_password)
+    def login_expecting_inventory(self, username: str, password: str) -> None:
+        self._fill_credentials(username, password)
         self.click_and_wait_for_url(self.LOGIN_BUTTON, "inventory.html")
+
+    def login_as_standard_user(self) -> None:
+        self.login_expecting_inventory(CONFIG.saucedemo_user, CONFIG.saucedemo_password)
 
     def error_message(self) -> str:
         return self.text_of(self.ERROR)
+
+    def is_login_form_visible(self) -> bool:
+        return self.is_visible(self.LOGIN_BUTTON, timeout=10)
