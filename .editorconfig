@@ -1,0 +1,27 @@
+# https://editorconfig.org
+# Mirrors setup.cfg's [flake8] rules so editors without the plugin still match it.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+[*.py]
+indent_size = 4
+
+[*.feature]
+indent_size = 2
+
+[*.{yml,yaml,json}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
