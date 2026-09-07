@@ -104,6 +104,10 @@ make allure         # build reports/allure-report
 make allure-serve   # serve it
 ```
 
+`make categories` (run automatically by the targets above) seeds
+`allure/categories.json` into the results so the Allure report groups failures as
+product defects, broken locators, stale elements, timeouts or demo instability.
+
 ## CI
 
 `.github/workflows/ci.yml` installs Chrome, runs the headless BDD suite on every push

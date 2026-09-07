@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Ignored tests",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Product defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Broken locators / page changes",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*NoSuchElementException.*"
+  },
+  {
+    "name": "Stale elements (needs a wait)",
+    "matchedStatuses": ["broken", "failed"],
+    "traceRegex": ".*StaleElementReferenceException.*"
+  },
+  {
+    "name": "Timeouts (slow demo / missing wait)",
+    "matchedStatuses": ["broken", "failed"],
+    "traceRegex": ".*TimeoutException.*"
+  },
+  {
+    "name": "Environment / demo instability",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*(WebDriverException|SessionNotCreatedException|ConnectionError|502|503).*"
+  }
+]
