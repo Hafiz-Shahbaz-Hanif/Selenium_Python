@@ -4,10 +4,17 @@ install:
 	python -m pip install --upgrade pip
 	pip install -r requirements.txt
 
-# Drop the defect-classification rules where Allure expects them, before a run.
+# Seed Allure metadata (defect categories + run environment) before a run.
 categories:
 	mkdir -p reports/allure-results
 	cp allure/categories.json reports/allure-results/categories.json
+	printf '%s\n' \
+		'Framework=Selenium 4 + Behave + Page Object Model' \
+		'Runner=behave (behavex for parallel, feature-level workers)' \
+		'Browser=chrome / firefox (Selenium Manager, no driver binaries)' \
+		'UI.SauceDemo=https://www.saucedemo.com' \
+		'UI.OrangeHRM=https://opensource-demo.orangehrmlive.com' \
+		> reports/allure-results/environment.properties
 
 # Full suite, sequential, with Allure results
 test: categories

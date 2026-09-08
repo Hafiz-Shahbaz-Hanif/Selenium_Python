@@ -96,6 +96,23 @@ make parallel                            # behavex, 4 workers, feature-level
 
 Behave userdata (`-D`): `headless` (true/false), `browser` (chrome/firefox).
 
+### Parallel runs (`behavex`)
+
+`behavex` runs whole feature files in parallel worker processes — the model that
+backs the résumé's "8 h → 2 h regression" claim. Because `before_scenario` gives
+every scenario its own browser and each scenario owns its data, features are
+independent and safe to shard.
+
+```bash
+behavex -o reports/behavex --parallel-processes 4 --parallel-scheme feature
+behavex --tags=@saucedemo -o reports/behavex --parallel-processes 2
+make parallel                                   # the 4-worker shortcut
+```
+
+Output lands in `reports/behavex/` (HTML + JUnit). Raise `--parallel-processes` to
+the number of cores the CI runner has; `--parallel-scheme scenario` shards finer
+at the cost of more browser starts.
+
 ## Reports
 
 ```bash
@@ -105,8 +122,9 @@ make allure-serve   # serve it
 ```
 
 `make categories` (run automatically by the targets above) seeds
-`allure/categories.json` into the results so the Allure report groups failures as
-product defects, broken locators, stale elements, timeouts or demo instability.
+`allure/categories.json` and an `environment.properties` into the results, so the
+Allure report groups failures (product defects, broken locators, stale elements,
+timeouts, demo instability) and records which browser and target sites the run used.
 
 ## CI
 
