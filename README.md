@@ -94,7 +94,8 @@ behave -D headless=false -D browser=firefox   # headed Firefox
 make parallel                            # behavex, 4 workers, feature-level
 ```
 
-Behave userdata (`-D`): `headless` (true/false), `browser` (chrome/firefox).
+Behave userdata (`-D`): `headless` (true/false), `browser` (chrome/firefox). Full
+tag reference and more userdata examples: [`docs/TAGS.md`](docs/TAGS.md).
 
 ### Parallel runs (`behavex`)
 
