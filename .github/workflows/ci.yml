@@ -37,7 +37,7 @@ jobs:
 
       - name: Publish Allure results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: allure-results-saucedemo
           path: reports/allure-results
@@ -75,7 +75,7 @@ jobs:
 
       - name: Publish Allure results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: allure-results-orangehrm
           path: reports/allure-results
