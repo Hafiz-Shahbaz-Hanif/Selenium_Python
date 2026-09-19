@@ -84,6 +84,10 @@ pip install -r requirements.txt
 cp .env.example .env          # optional — defaults already target the public demos
 ```
 
+Optional: `pip install pre-commit && pre-commit install` runs `flake8` and a few
+hygiene checks (trailing whitespace, EOF newline, YAML syntax) on every commit —
+see `.pre-commit-config.yaml`.
+
 ## Running
 
 ```bash
