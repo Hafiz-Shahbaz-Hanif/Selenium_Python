@@ -136,6 +136,8 @@ timeouts, demo instability) and records which browser and target sites the run u
 `.github/workflows/ci.yml` installs Chrome, runs the headless BDD suite on every push
 and PR, and uploads `allure-results`, JUnit XML and the run log as artifacts.
 
+See [`CHANGELOG.md`](CHANGELOG.md) for what shipped and when.
+
 ---
 
 ## Author
