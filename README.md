@@ -80,13 +80,14 @@ and parallel execution.
 
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.txt        # runtime only
+# or: pip install -r requirements-dev.txt   # runtime + flake8/pre-commit
 cp .env.example .env          # optional — defaults already target the public demos
 ```
 
-Optional: `pip install pre-commit && pre-commit install` runs `flake8` and a few
-hygiene checks (trailing whitespace, EOF newline, YAML syntax) on every commit —
-see `.pre-commit-config.yaml`.
+Optional: with `requirements-dev.txt` installed, `pre-commit install` runs `flake8`
+and a few hygiene checks (trailing whitespace, EOF newline, YAML syntax) on every
+commit — see `.pre-commit-config.yaml`.
 
 ## Running
 

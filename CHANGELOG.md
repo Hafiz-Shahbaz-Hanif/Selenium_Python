@@ -2,6 +2,12 @@
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-09-23
+
+### Changed
+- Split `requirements.txt` into runtime-only deps and a new `requirements-dev.txt`
+  (adds `flake8`, `pre-commit`) — a plain install no longer pulls dev tooling.
+
 ## 2026-09-22
 
 ### Added
