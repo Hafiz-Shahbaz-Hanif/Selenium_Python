@@ -38,7 +38,7 @@ and parallel execution.
   source are attached to the Allure report (`features/environment.py`).
 - **Config as code** — `config/config.py` is a typed, frozen dataclass driven by
   environment variables and Behave `-D` userdata, with working defaults.
-- **Data-driven at scale** — ~110 scenarios, most as `Scenario Outline` tables
+- **Data-driven at scale** — ~106 scenarios, most as `Scenario Outline` tables
   (all 6 products × add / remove / detail / buy; every main OrangeHRM module).
 - **Developed with an agentic-AI workflow** — `CLAUDE.md` plus `.claude/` subagents
   (`failure-triager`, `page-object-author`) and skills (`new-bdd-scenario`,
@@ -54,7 +54,7 @@ and parallel execution.
 | `cart` | 16 | listed / removed per product, prices match catalogue |
 | `checkout` | 14 | buy each product with 8% tax + total maths, field validation, cancels |
 | `orangehrm_login` | 2 | valid / invalid |
-| `orangehrm_navigation` | 25 | open + presence for all 12 main-menu modules, logout |
+| `orangehrm_navigation` | 23 | open + presence for all 12 main-menu modules, logout |
 
 ## Project structure
 

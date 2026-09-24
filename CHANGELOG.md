@@ -2,6 +2,14 @@
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-09-24
+
+### Fixed
+- README coverage numbers had drifted: `orangehrm_navigation` was listed as 25
+  scenarios (actual: 23 — 1 landing + 9-row menu-opens outline + 12-row
+  availability outline + 1 logout), and the total was ~110 instead of the
+  actual ~106. Recounted directly from every `.feature` file.
+
 ## 2026-09-23
 
 ### Changed
