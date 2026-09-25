@@ -5,6 +5,7 @@
 ![Selenium](https://img.shields.io/badge/Selenium-4.x-43B02A?logo=selenium&logoColor=white)
 ![Behave](https://img.shields.io/badge/BDD-Behave%2FGherkin-23D96C?logo=cucumber&logoColor=white)
 ![Allure](https://img.shields.io/badge/Report-Allure-FF7043)
+![Scenarios](https://img.shields.io/badge/scenarios-106-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 A behaviour-driven web automation framework built with **Selenium WebDriver**, **Python** and
