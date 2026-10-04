@@ -2,6 +2,14 @@
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-10-04
+
+### Fixed
+- README and `CLAUDE.md` now list the `make smoke`, `make lint`, `make install`
+  and `make clean` targets, which existed in the `Makefile` but were documented
+  nowhere. Also confirmed the documented lint gate holds: `flake8 .` (pinned
+  7.1.1, rules from `setup.cfg`) exits clean on the whole repo.
+
 ## 2026-09-25
 
 ### Added

@@ -54,7 +54,9 @@ behave --tags=@smoke
 behave --tags=@saucedemo
 behave -D headless=false -D browser=firefox
 make parallel                             # behavex, 4 workers
+make smoke                                # @smoke subset, with Allure results
 make test && make allure                  # Allure results + HTML report
+make lint                                 # same as: flake8 .
 flake8 .
 ```
 

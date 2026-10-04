@@ -100,6 +100,10 @@ behave -D headless=false -D browser=firefox   # headed Firefox
 make parallel                            # behavex, 4 workers, feature-level
 ```
 
+The `Makefile` wraps the common ones, and the Allure targets seed the report metadata
+for you: `make install`, `make test`, `make smoke` (the `@smoke` subset, with Allure
+results), `make lint` (`flake8 .`), `make allure`, `make allure-serve`, `make clean`.
+
 Behave userdata (`-D`): `headless` (true/false), `browser` (chrome/firefox). Full
 tag reference and more userdata examples: [`docs/TAGS.md`](docs/TAGS.md).
 
