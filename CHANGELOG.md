@@ -2,6 +2,16 @@
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-10-21
+
+### Changed
+- Dependabot config tuned after its first weekly run opened ~10 separate PRs:
+  `behave`, `behavex` and `allure-behave` now move in one PR (behavex and
+  allure-behave both extend Behave, and behavex requires `behave>=1.2.6,<2`); the
+  remaining minor/patch bumps are batched; GitHub Actions updates are batched;
+  commit messages use the repo's `chore(deps)` / `ci(deps)` convention. Validated
+  against the official Dependabot JSON schema.
+
 ## 2026-10-04
 
 ### Fixed
